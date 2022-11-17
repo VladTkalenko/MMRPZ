@@ -95,24 +95,14 @@ class GraphBuilder:
                         and Line(point_1, point_2) not in self.lines:
                     flag = True
 
+                # if two points connected through third point, and not include some edge of polygon, don't connect them
+                for point in self.points[1:-1]:
+                    if (point_1, point_2) != (self.points[0], self.points[-1]) and \
+                       Point.isOnTheSameLine(point_1, point, point_2) and Line(point_1, point) not in self.lines \
+                       and Line(point, point_2) not in self.lines:
+                        flag = True
+
                 if len(indexes_of_points_on_base_line) == 2:
-                    # If line connected outer point with point of polygon and intersect another its point - don't make connection
-                    if i in indexes_of_points_on_base_line and j in (0, len(self.points)-1):
-                        another_index = [item for item in indexes_of_points_on_base_line if item != i][0]
-                        another_point = self.points[another_index]
-                        if abs(Line(another_point, self.points[j]).length() + Line(another_point, self.points[i]).length() \
-                               - Line(self.points[i], self.points[j]).length()) < 0.00001:
-                            flag = True
-
-                    if j in indexes_of_points_on_base_line and i in (0, len(self.points)-1):
-                        another_index = [item for item in indexes_of_points_on_base_line if item != j][0]
-                        another_point = self.points[another_index]
-                        if abs(Line(another_point, self.points[i]).length() + Line(another_point, self.points[j]).length() \
-                               - Line(self.points[i], self.points[j]).length()) < 0.00001:
-                            flag = True
-
-                    # If base go through two points of polygon - points shouldn't be connected
-
                     if (point_1, point_2) == (self.points[0], self.points[-1]) and \
                        Line(self.points[indexes_of_points_on_base_line[0]], self.points[indexes_of_points_on_base_line[1]]) not in self.lines:
                         flag = True

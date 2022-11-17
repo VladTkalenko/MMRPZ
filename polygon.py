@@ -31,9 +31,13 @@ class Point:
 
     @staticmethod
     def isOnTheSameLine(a, b, c):
-
-        if abs(Line(a, b).length() + Line(b, c).length() - Line(a, c).length()) < 0.00001:
-            return True
+        if b != c and b != a:
+            if abs(Line(a, b).length() + Line(b, c).length() - Line(a, c).length()) < 0.00001:
+                return True
+            else:
+                return False
+        else:
+            return False
 
 
 class Line:
